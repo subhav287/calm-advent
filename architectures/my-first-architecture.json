@@ -16,7 +16,67 @@
       "node-type": "service",
       "name": "Trade Capture Service",
       "description": "Service that monitors client trade file directories, ingests trade files, and processes each row as an individual trade record for downstream processing"
+    },
+    {
+      "unique-id": "trade-capture-db",
+      "node-type": "database",
+      "name": "Trade Capture Database",
+      "description": "Database storing ingested trade records for the Trade Capture Service"
+    },
+    {
+      "unique-id": "client-actor",
+      "node-type": "actor",
+      "name": "Client",
+      "description": "External client who provides trade files and interacts with the Trade Capture Service"
+    },
+    {
+      "unique-id": "rcade",
+      "node-type": "system",
+      "name": "RCADE",
+      "description": "Overall system that contains the Trade Capture Service and its database"
     }
   ],
-  "relationships": []
+  "relationships": [
+    {
+      "unique-id": "trade-capture-service-connects-db",
+      "description": "Service connects to the database to store and retrieve ingested trade records",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "trade-capture-service"
+          },
+          "destination": {
+            "node": "trade-capture-db"
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "client-interacts-trade-capture-service",
+      "description": "Client interacts with the Trade Capture Service to provide trade files",
+      "relationship-type": {
+        "interacts": {
+          "actor": "client-actor",
+          "nodes": [
+            "trade-capture-service"
+          ]
+        }
+      }
+    }
+    ,
+    {
+      "unique-id": "rcade-composed-of-components",
+      "description": "RCADE system is composed of the Trade Capture Service and its database",
+      "relationship-type": {
+        "composed-of": {
+          "container": "rcade",
+          "nodes": [
+            "trade-capture-service",
+            "trade-capture-db"
+          ]
+        }
+      }
+    }
+  ]
 }
+
